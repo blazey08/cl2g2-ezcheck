@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {% extends "base.html" %}
 
 {% block head %}
@@ -23,4 +24,31 @@
         {% endfor %}
         </tbody>
     </table>
+=======
+{% extends "base.html" %}
+
+{% block head %}
+{{ super() }}
+{% endblock %}
+
+{% block content %}
+    <table class="table table-striped">
+        <thead>
+        <h1>{{title}}</h1>
+        <tr>
+            <th>Tenant</th>
+            <th>Score</th>
+
+        </tr>
+        </thead>
+        <tbody>
+        {% for data in tenants %}
+            <tr>
+                <td>{{ data.tenant }}</td>
+                <td>{{ data.score }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+>>>>>>> 7051cf6f23955ab084e2c4ceb770357b960ec771
 {% endblock %}

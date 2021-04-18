@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {% extends "base.html" %}
 
 {% block head %}
@@ -10,4 +11,18 @@
         {{ form.option }}
         {{ form.submit() }}
     </form>
+=======
+{% extends "base.html" %}
+
+{% block head %}
+    {{ super() }}
+{% endblock %}
+
+{% block content %}
+    <form action="" method="post" novalidate>
+        {{ form.hidden_tag() }}
+        {{ form.option }}
+        {{ form.submit() }}
+    </form>
+>>>>>>> 7051cf6f23955ab084e2c4ceb770357b960ec771
 {% endblock %}

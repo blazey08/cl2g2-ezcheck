@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {% extends "base.html" %}
 
 {% block head %}
@@ -27,4 +28,35 @@
     </tbody>
 </table>
 
+=======
+{% extends "base.html" %}
+
+{% block head %}
+{{ super() }}
+{% endblock %}
+
+{% block content %}
+
+<table id="directories" class="table table-bordered table-hover">
+    <caption>List of Shops</caption>
+    <thead class="thead dark">
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Shop Name</th>
+            <th scope="col">Shop Location</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for name,location in data.items() %}
+        <tr>
+            <th scope="row">{{loop.index}}</th>
+            <td>{{name}}</td>
+            <td>{{location}}</td>
+
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+>>>>>>> 7051cf6f23955ab084e2c4ceb770357b960ec771
 {% endblock %}

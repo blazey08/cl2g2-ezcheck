@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {% extends "base.html" %}
 {% block content %}
     <table class="table table-striped">
@@ -19,4 +20,27 @@
         {% endfor %}
         </tbody>
     </table>
+=======
+{% extends "base.html" %}
+{% block content %}
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Date Time</th>
+            <th>Auditor</th>
+            <th>Tenant</th>
+
+        </tr>
+        </thead>
+        <tbody>
+        {% for data in dates %}
+            <tr>
+                <td>{{ data.date }}</td>
+                <td>{{ data.auditor }}</td>
+                <td>{{ data.tenant }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+>>>>>>> 7051cf6f23955ab084e2c4ceb770357b960ec771
 {% endblock %}

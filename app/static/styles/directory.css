@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 
 
 #directory-grid-card div.card-header {
@@ -11,4 +12,19 @@
     border-color:rgba(255, 140, 0, 0.363); 
     min-width: 60%; 
     min-height: 5%; 
+=======
+
+
+#directory-grid-card div.card-header {
+    font-weight: bold;
+    letter-spacing: .125rem;
+    text-transform: uppercase;
+}
+
+#directory-button{
+    background-color: rgba(245, 245, 245, 0.308); 
+    border-color:rgba(255, 140, 0, 0.363); 
+    min-width: 60%; 
+    min-height: 5%; 
+>>>>>>> 7051cf6f23955ab084e2c4ceb770357b960ec771
 }
