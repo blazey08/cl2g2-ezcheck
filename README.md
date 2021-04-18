@@ -1,5 +1,7 @@
-<<<<<<< HEAD
-# cl02grp02
-=======
-# cl2g2-ezcheck
->>>>>>> 7051cf6f23955ab084e2c4ceb770357b960ec771
+>>>>>>> # 50.003 ESC CL02 Group 2 - EzCheck
+>>>>>
+>>>>>## Our project breakdown:
+>>>>>
+>>>>>#### Flask Application with the frontend consisting of HTML, CSS and Javascript, that is optimized for both web and mobile. Databases used are firebase and sqlite3.
+>>>
+>>>## 	
