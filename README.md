@@ -4,13 +4,13 @@
 
 #### Flask Application with the frontend consisting of HTML, CSS and Javascript, that is optimized for both web and mobile. Databases used are firebase and sqlite3.
 
-##Type of Personnel:
+## Type of Personnel:
 
-###Admin
+### Admin
 #### Handles the management of accounts (Create, Edit, Delete)
 
-###Auditor
+### Auditor
 #### As a staff, has more privileges than tenants
 
-###Tenants
-####Can only see their own audits
+### Tenants
+#### Can only see their own audits
