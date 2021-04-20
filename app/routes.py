@@ -1,6 +1,8 @@
 from re import I
-from flask import render_template, redirect, url_for, request,session, flash
+from flask import render_template, redirect, url_for, request,session, flash, Response, send_file
 import os
+import pandas as pd
+from io import BytesIO
 from app import app, db, mail
 from app.adminstrator import adminstrator
 from app.audits import audits
@@ -9,7 +11,7 @@ from app.forms import AuditForm, ResultForm, NewForm, ShopForm, GraphForm
 from datetime import datetime
 from sqlalchemy import func, extract
 from app.email import send_audit_mail
-from app.generalFunctions import create_account, accountType, getusername, getuserid, login, send_msg, pull_msg, makeList, get_user_list
+from app.generalFunctions import create_account, accountType, getusername, getuserid, login, send_msg, pull_msg, makeList, get_user_list, new_broadcast, get_broadcast_list
 
 #Images Folder
 UPLOAD_FOLDER = os.path.join('static','images')
@@ -24,7 +26,7 @@ def check_admin():
 @app.route('/', methods=["GET", "POST"])
 def login_page():
 
-    if request.method == "POST":
+    if request.method == "POST": 
         username = request.form.get("username")
         password = request.form.get("password")
         token = login(username,password)
@@ -50,7 +52,8 @@ def login_page():
 
 @app.route('/main')
 def main_page():
-    broadcast_message = {"Auditor 1":{"title":"Reminder", "timestamp":"19:00:00", "content":"jgsdjiojfs"},"Auditor 2":{"title":"Warning", "timestamp":"20:00:00", "content":"Please comply!!"}, "Auditor 3": {"title":"Time to Eat", "timestamp":"22:00:00", "content":"Food's ready!"},"Auditor 4":{"title":"Tellonme", "timestamp":"19:00:00", "content":"hello world, I am here"},"Auditor 5":{"title":"Alert", "timestamp":"19:00:00", "content":"hello world, I am here"}}
+    #broadcast_message = {"Auditor 1":{"title":"Reminder", "timestamp":"19:00:00", "content":"jgsdjiojfs"},"Auditor 2":{"title":"Warning", "timestamp":"20:00:00", "content":"Please comply!!"}, "Auditor 3": {"title":"Time to Eat", "timestamp":"22:00:00", "content":"Food's ready!"},"Auditor 4":{"title":"Tellonme", "timestamp":"19:00:00", "content":"hello world, I am here"},"Auditor 5":{"title":"Alert", "timestamp":"19:00:00", "content":"hello world, I am here"}}
+    broadcast_message = get_broadcast_list(session["clearance"])
     return render_template("main/main.html", broadcast= broadcast_message, alert=[])
 
 
@@ -114,8 +117,6 @@ def settings():
     session.pop('clearance')
     return render_template("login/login.html")
 
-
-
 @app.route('/data', methods=['GET', 'POST'])
 def data_page():
     #if check_admin():
@@ -136,11 +137,11 @@ def data_page():
 
         elif option == 'individual':
             title = "TOP 5 WORST PERFORMNG INDIVIDUAL SCORES"
-            part1 = "Professionalism & Staff Hygiene"
-            part2 = "Housekeeping & General Cleanliness"
-            part3 = "Food Hygiene"
-            part4 = "Healthier Choice in line with HPB’s Healthy Eating’s Initiative "
-            part5 = "Workplace Safety & Health  "
+            part1 = "Professionalism & Staff Hygiene 10"
+            part2 = "Housekeeping & General Cleanliness 20"
+            part3 = "Food Hygiene 35"
+            part4 = "Healthier Choice in line with HPB’s Healthy Eating’s Initiative 25"
+            part5 = "Workplace Safety & Health  20"
             month = datetime.now().month
             tenants_part1 = Audit.query.filter(extract('month',Audit.timestamp)==month).order_by(Audit.part1_score.asc(),Audit.tenant.asc()).all()
             tenants_part2 = Audit.query.filter(extract('month',Audit.timestamp)==month).order_by(Audit.part2_score.asc(),Audit.tenant.asc()).all()
@@ -190,12 +191,20 @@ def data_page():
                 tenant = a.tenant
                 user = User.query.filter(User.username == tenant).first()
                 if user.institution == title1:
+                    if len(cgh)== 5:
+                        break
                     cgh.append([tenant,a.total_score])
                 if user.institution == title2:
+                    if len(kkh )== 5:
+                        break
                     kkh.append([tenant,a.total_score])
                 if user.institution == title3:
+                    if len(sgh) == 5:
+                        break
                     sgh.append([tenant,a.total_score])
                 if user.institution== title4:
+                    if len(skh) == 5:
+                        break
                     skh.append([tenant,a.total_score])
             return render_template("institution_compare.html", title1=title1, title2=title2, title3=title3, title4=title4, cgh = cgh, kkh = kkh, sgh = sgh, skh = skh)
 
@@ -217,13 +226,14 @@ def data_individual():
 
 @app.route('/search_query', methods=['GET', 'POST'])
 def search_query():
-    print("searching")
-    tenant = request.form['auditee']
-    tenants = Audit.query.filter(Audit.tenant==tenant).order_by(Audit.timestamp.asc()).all()    
+    tenant_name = request.form['auditee']
+    tenants = Audit.query.filter(Audit.tenant==tenant_name).order_by(Audit.timestamp.asc()).all()    
     score = []
     for tenant in tenants:
+        if len(score) == 4:
+            break
         score.append(tenant.total_score)
-    return {'tenant':score,'tenant_name':tenant}
+    return {'tenant':score, 'tenant_name':tenant_name}
 
 @app.route('/data/frequency', methods=['GET', 'POST'])
 def data_frequency():
@@ -248,6 +258,8 @@ def data_frequency():
                     auditor_dict.append( audit_list)
                     break
             audit_list.append([a.tenant,a.timestamp])
+        auditor_dict[0] = auditor_dict[0][-5:]
+
         return render_template("auditor_data.html", auditor = auditor_dict, title = form.auditor.data ) 
 
     title1 = "CGH"
@@ -273,7 +285,7 @@ def data_frequency():
         if user.institution== title4:
             skh.append([a.timestamp,a.auditor, a.tenant])
 
-    return render_template("frequency.html", form = form, title1=title1, title2=title2, title3=title3, title4=title4, cgh = cgh, kkh = kkh, sgh = sgh, skh = skh)
+    return render_template("frequency.html", form = form, title1=title1, title2=title2, title3=title3, title4=title4, cgh = cgh[-5:], kkh = kkh, sgh = sgh, skh = skh)
 
 '''
 
@@ -310,9 +322,51 @@ def create_broadcast():
         print(recipient)
         broadcast = request.form["broadcastMsg"]
         print(broadcast)
+        new_broadcast(session["userId"], recipient, broadcast)
+
         render_template("broadcast/broadcast.html")
     return render_template("broadcast/broadcast.html")
 
+
+
+@app.route('/download', methods=["GET","POST"])
+def download():
+    month = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+    tenant_name = request.form['auditee']
+    tenants = Audit.query.filter(Audit.tenant==tenant_name).order_by(Audit.timestamp.asc()).all()    
+    result = []
+    for tenant in tenants:
+        if len(result) >= 4 and len(result)<13:
+            print("hi")
+            result.append(0)
+        elif len(result) >11:
+            break
+        else:
+            result.append(tenant.total_score)
+        
+
+    data = []
+    for i in range(len(month)):
+        data.append([month[i], result[i]])
+    df_1 = pd.DataFrame(data, columns=["Month", "Result"])
+
+    #create an output stream
+    output = BytesIO()
+    writer = pd.ExcelWriter(output, engine='xlsxwriter')
+
+    #taken from the original question
+    df_1.to_excel(writer, startrow = 0,merge_cells = False, sheet_name = "Sheet_1", index=False)
+    workbook = writer.book
+    worksheet = writer.sheets["Sheet_1"]
+
+    #the writer has done its job
+    writer.close()
+
+    #go back to the beginning of the stream
+    output.seek(0)
+
+    #finally return the file
+    return send_file(output, attachment_filename="data.xlsx", as_attachment=True)
 
 
 
