@@ -545,7 +545,8 @@ def audit_result(audit_id):
         comments = request.form["audit-comments"]   
         images_path = []
         images_names = []
-
+        print("original")
+        print(images_list)
         if images_list:
             for each in images_list:
                 images_names.append(each.filename)
@@ -554,7 +555,8 @@ def audit_result(audit_id):
                 each.save(path)
                 
         cid = add_to_database(audit_id, comments, section, images_path, session["userId"], auditTenant(audit_id))
-
+        print("getting path for images")
+        print(images_path)
         upload_image(audit_id, section, cid, images_path)
         return redirect(url_for("audit_result", audit_id = audit_id))
 
