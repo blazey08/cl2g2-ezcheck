@@ -1,6 +1,6 @@
 from flask_mail import Message
 import pdfkit
-import os
+import os, sys, subprocess, platform
 from app import mail
 from flask import render_template
 from app import app
