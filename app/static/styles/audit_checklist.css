@@ -64,3 +64,73 @@ div#audit_gallery{
   grid-template-columns: 1fr 1fr 1fr;
   grid-gap: 2vw;
 }
+
+
+/*checklist_w*/
+
+table#audit-checklist{
+  border-collapse: collapse;
+  margin: 25px 0;
+  font-size: 0.9em;
+  font-family: sans-serif;
+  min-width: 400px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.15);
+}
+
+thead#checklist-head{
+  background-color: #FC6A03;
+  color:#ffffff;
+  text-align: left;
+  font-size: x-large;
+}
+
+#audit-checklist th{
+  font-size: large;
+}
+
+#audit-checklist th, #audit-checklist td{
+  padding: 12px 15px;
+}
+
+#audit-checklist tbody tr{
+  border-bottom: 1px solid #dddddd;
+}
+
+#audit-checklist tbody tr:nth-of-type(even){
+  background-color: #f3f3f3;
+}
+
+#audit-checklist tbody tr:last-of-type{
+  border-bottom: 2px solid #FC6A03;
+}
+
+#audit-checklist tbody tr.active-row{
+  font-weight: bold;
+  color:#009879;
+}
+
+p#audit-checklistp{
+  font-size: large;
+  font-weight: bold;
+}
+
+/*results*/
+button#new_comment{
+  border: 1px solid rgb(255, 136, 0) ;
+  border-radius: 5%;
+  padding: auto;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: medium;
+}
+
+div#uploadbox{
+  height: 50%;
+  width: 100%;
+}
+
+form#new_comment h4{
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  display: inline-block;
+}
