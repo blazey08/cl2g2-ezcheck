@@ -15,7 +15,7 @@ def initialize():
         app = firebase_admin.get_app()
         
     except ValueError as e:
-        cred=credentials.Certificate("app\Firebase_Service_Account_Key.json")
+        cred=credentials.Certificate("Firebase_Service_Account_Key.json")
         firebase_admin.initialize_app(cred, {
             'storageBucket': 'ezcheck-aa2cc.appspot.com',
             'databaseURL': 'https://ezcheck-aa2cc-default-rtdb.firebaseio.com/'
