@@ -16,9 +16,9 @@ def initialize():
         
     except ValueError as e:
         #for heroku
-        cred=credentials.Certificate("/app/app/Firebase_Service_Account_Key.json")
+        #cred=credentials.Certificate("/app/app/Firebase_Service_Account_Key.json")
         #for local
-        #cred=credentials.Certificate("app/Firebase_Service_Account_Key.json")
+        cred=credentials.Certificate("app/Firebase_Service_Account_Key.json")
         firebase_admin.initialize_app(cred, {
             'storageBucket': 'ezcheck-aa2cc.appspot.com',
             'databaseURL': 'https://ezcheck-aa2cc-default-rtdb.firebaseio.com/'
