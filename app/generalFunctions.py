@@ -30,14 +30,15 @@ def initialize():
 def create_account(username: str, email: str, usertype: str, password:str):
     initialize()
     try:
+        user1 = User(username = username, email = email, type = usertype)
+        userid = str(user1.id)
         auth.create_user(email = email, uid = userid)
         auth.update_user(userid, password = password)
-        user1 = User(username = username, email = email, type = usertype)
         db.session.add(user1)
         db.session.commit()
-        userid = str(user1.id)
         return True
-    except exc.IntegrityError:
+    #except exc.IntegrityError:
+    except:
         db.session.rollback()
         print("User already exists.")
         return False 
